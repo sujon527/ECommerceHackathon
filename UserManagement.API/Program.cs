@@ -1,3 +1,4 @@
+using UserManagement.Core.DTOs;
 using UserManagement.Core.Interfaces;
 using UserManagement.Data.Configuration;
 using UserManagement.Data.Repositories;
@@ -11,11 +12,16 @@ builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IPasswordValidator, PasswordValidator>();
+
+// Register Validators
+builder.Services.AddScoped<IValidator<CreateUserDto>, NameValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, AgeValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, PasswordValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, UniquenessValidator>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -29,9 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
