@@ -9,4 +9,6 @@ public interface IUserService
     Task<UserDto?> GetByIdAsync(string id);
     Task<List<UserDto>> GetActiveUsersAsync();
     Task<List<UserDto>> GetInactiveUsersAsync();
+    Task DeleteUserAsync(string id);
+    Task ActivateUserAsync(string id);
 }

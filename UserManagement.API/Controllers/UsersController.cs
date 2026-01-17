@@ -67,4 +67,38 @@ public class UsersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        try
+        {
+            await _userService.DeleteUserAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message == "User not found.")
+                return NotFound(new { message = ex.Message });
+            
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id}/activate")]
+    public async Task<IActionResult> Activate(string id)
+    {
+        try
+        {
+            await _userService.ActivateUserAsync(id);
+            return Ok(new { message = "User activated successfully." });
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message == "User not found.")
+                return NotFound(new { message = ex.Message });
+            
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }

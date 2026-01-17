@@ -41,4 +41,11 @@ public class UserRepository : MongoRepository<User>, IUserRepository
     {
         return await _collection.Find(u => u.Id == id).FirstOrDefaultAsync();
     }
+
+    public async Task ActivateAsync(string id)
+    {
+        var filter = Builders<User>.Filter.Eq("Id", id);
+        var update = Builders<User>.Update.Set("IsDeleted", false);
+        await _collection.UpdateOneAsync(filter, update);
+    }
 }

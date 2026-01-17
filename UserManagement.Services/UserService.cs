@@ -104,6 +104,20 @@ public class UserService : IUserService
         return users.Select(MapToDto).ToList();
     }
 
+    public async Task DeleteUserAsync(string id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null) throw new Exception("User not found.");
+        await _userRepository.DeleteAsync(id);
+    }
+
+    public async Task ActivateUserAsync(string id)
+    {
+        var user = await _userRepository.GetByIdIncludingDeletedAsync(id);
+        if (user == null) throw new Exception("User not found.");
+        await _userRepository.ActivateAsync(id);
+    }
+
     private async Task ValidateOrThrowAsync(IValidator<IUserValidationFields> validator, IUserValidationFields fields)
     {
         var (isValid, errorMessage) = await validator.ValidateAsync(fields);

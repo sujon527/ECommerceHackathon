@@ -10,4 +10,5 @@ public interface IUserRepository : IRepository<User>
     Task<User?> GetByPhoneNumberIncludingDeletedAsync(string phoneNumber);
     Task<List<User>> GetInactiveAsync();
     Task<User?> GetByIdIncludingDeletedAsync(string id);
+    Task ActivateAsync(string id);
 }
